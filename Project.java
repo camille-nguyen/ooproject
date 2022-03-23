@@ -13,18 +13,15 @@ public class Project {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
 
+
         /*
         // Add red panel 
         pan.setSize(350,350);
         pan.setBackground(Color.red);
-
         fr.add(pan);
-        */
 
-        /*
         // Border Layout
         fr.setLayout(new BorderLayout());
-
         fr.add("East", new JButton("East"));
         fr.add("West", new JButton("West"));
         fr.add("North", new JButton("North"));
@@ -34,7 +31,8 @@ public class Project {
          
         // Grid Layout 
         fr.setLayout(new GridLayout(3,2));
-        fr.add(new JButton("1"));
+        ImageIcon houseIcon = new ImageIcon("assets/img/home.png", "house");
+        fr.add(new JButton("Home", houseIcon));
         fr.add(new JButton("2"));
         fr.add(new JButton("3"));
         fr.add(new JButton("4"));

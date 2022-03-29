@@ -17,13 +17,17 @@ class Project extends JFrame {
     //declare the Vertical Pane, Horizontal pane and Panels
     private  JSplitPane VerticalPane;
     private  JSplitPane HorizontalPane;
+    private  JSplitPane Pane;
     private  JPanel  P1;
     private  JPanel  P2;
+    private  JPanel  P3;
+    private  JPanel  P4;
     Color cl = new Color(190,190,240);
+    Color beige = new Color(238,199,154);
 
     // Creates main project JFrame with multiple panels inside
     public Project() {
-        setTitle("OOP Project");
+        setTitle("stUwUdent");
         //object of the panel
         JPanel PanelObj = new JPanel();
         //set borderlayout for the panel
@@ -31,26 +35,26 @@ class Project extends JFrame {
         getContentPane().add( PanelObj );
         // Create three different panels
         BudgetTrackerPanel();
+        HomeworkPanel();
+        ToDoPanel();
+        SchedulePanel();
         P1.setBackground(cl);
+        P2.setBackground(beige);
 
         // Create vertical and horiontal splitter pane
-        VerticalPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT );
-        PanelObj.add( VerticalPane, BorderLayout.CENTER );
-        HorizontalPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
-        HorizontalPane.setLeftComponent( P1 );
-        HorizontalPane.setRightComponent( P2 );
-        VerticalPane.setLeftComponent( HorizontalPane );
-
+        VerticalPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT, P1, P3);
+        HorizontalPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, VerticalPane, P2);
+        Pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, HorizontalPane, P4);
+        PanelObj.add(Pane, BorderLayout.CENTER );
 
         // set the Size of frame
-        setSize(500, 300);
+        setSize(1700, 900);
         // Place JFrame window in center of screen (regardless of different screensizes)
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-getSize().width/2, dim.height/2-getSize().height/2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
     }
 
-    
     public void BudgetTrackerPanel() {
         JTable jt;
 
@@ -70,6 +74,22 @@ class Project extends JFrame {
         jt.setBounds(30, 40, 200, 300);
         
         P1.add(new JScrollPane(jt));
+    }
+
+    public void HomeworkPanel() {
+        P2 = new JPanel();
+        P2.setPreferredSize(new Dimension(900, 190));
+        P2.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Homework", TitledBorder.CENTER, TitledBorder.TOP));
+    }
+
+    public void ToDoPanel() {
+        P3 = new JPanel();
+        P3.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "My To-Do List", TitledBorder.CENTER, TitledBorder.TOP));
+    }
+
+    public void SchedulePanel() {
+        P4 = new JPanel();
+        P4.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Today's schedule", TitledBorder.CENTER, TitledBorder.TOP));
     }
 
 

@@ -10,11 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 
-//sample class
 
 class Project extends JFrame {
 
-    //declare the Vertical Pane, Horizontal pane and Panels
+    // Declare the 3 Panes and Panels
     private  JSplitPane VerticalPane;
     private  JSplitPane HorizontalPane;
     private  JSplitPane Pane;
@@ -22,23 +21,23 @@ class Project extends JFrame {
     private  JPanel  P2;
     private  JPanel  P3;
     private  JPanel  P4;
-    Color cl = new Color(190,190,240);
+    Color lightpurple = new Color(190,190,240);
     Color beige = new Color(238,199,154);
 
-    // Creates main project JFrame with multiple panels inside
+    // Create main project JFrame with multiple panels inside
     public Project() {
         setTitle("stUwUdent");
-        //object of the panel
+        // Object of the panel
         JPanel PanelObj = new JPanel();
-        //set borderlayout for the panel
         PanelObj.setLayout( new BorderLayout() );
         getContentPane().add( PanelObj );
+
         // Create three different panels
         BudgetTrackerPanel();
         HomeworkPanel();
         ToDoPanel();
         SchedulePanel();
-        P1.setBackground(cl);
+        P1.setBackground(lightpurple);
         P2.setBackground(beige);
 
         // Create vertical and horiontal splitter pane
@@ -47,7 +46,7 @@ class Project extends JFrame {
         Pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, HorizontalPane, P4);
         PanelObj.add(Pane, BorderLayout.CENTER );
 
-        // set the Size of frame
+        // Set the Size of JFrame
         setSize(1700, 900);
         // Place JFrame window in center of screen (regardless of different screensizes)
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -64,7 +63,7 @@ class Project extends JFrame {
 
         // Data that will be displayed in JTable
         String[][] content = {
-        { "0€", "0€" ,"0€" , "0€"}
+            { "0€", "0€" ,"0€" , "0€"}
         };
         // Names of the column
         String[] header = { "Food", "Housing", "Clothing", "Transport" };

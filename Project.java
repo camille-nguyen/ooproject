@@ -218,8 +218,7 @@ class Project extends JFrame {
     }
 
 
-
-    // Implemented Class to make rounded corners on the panels
+    // Implemented Class to make panels with rounded corners
     public class RoundedPanel extends JPanel {
 
         /** Stroke size. it is recommended to set it to 1 for better view */
@@ -287,8 +286,6 @@ class Project extends JFrame {
        graphics.setStroke(new BasicStroke());
    }
     } 
-
-
     
     public static void main(String[] args) {
         Project splitPane = new Project();

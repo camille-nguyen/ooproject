@@ -1,26 +1,19 @@
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.border.LineBorder;
-import javax.swing.JLabel;
+
 import java.awt.Color;
 import javax.swing.plaf.DimensionUIResource;
 import java.awt.event.ActionEvent;
 
 
 class Project extends JFrame {
-    // Declare the 3 Panes and Panels
-    private  JSplitPane VerticalPane;
-    private  JSplitPane HorizontalPane;
-    private  JSplitPane Pane;
+    // Declare the Panels
     private  RoundedPanel P1;
     private  RoundedPanel P2;
     private  RoundedPanel P3;
@@ -31,7 +24,7 @@ class Project extends JFrame {
     Color green = new Color(146, 186, 146);
 
     // Create main project JFrame with multiple panels inside
-    public Project() {
+    public Project() throws FileNotFoundException, IOException {
 
         setLayout(null);
 
@@ -60,20 +53,33 @@ class Project extends JFrame {
         P4.setBackground(green);
 
         add(P1);
-        P1.setBounds(10,10, 500, 410);
+        P1.setBounds(10,30, 500, 220);
         add(P2);
         P2.setBounds(520,10, 860, 850);
         add(P3);
-        P3.setBounds(10,450, 500, 410);
+        P3.setBounds(10,270, 500, 550);
         add(P4);
         P4.setBounds(1390,10, 205, 850);
     }
 
-    public void BudgetTrackerPanel() {
-        JTable jt;
+    // BUDGET TRACKER FUNCTION //
+    FlowLayout experimentLayout = new FlowLayout();
+    JTextArea area;
+    JTable jt;
+    String dessous;
+    int foodsauv=0;       
+    int houssauv=0;
+    int cloth=0;
+    int tran=0;
+    public void BudgetTrackerPanel() throws FileNotFoundException, IOException {    
         P1 = new RoundedPanel();
+        P1.setLayout(experimentLayout);
 
-        // Panel title
+        // Plus buttons under JTable
+        JPanel ButtonsPanel = new JPanel();
+        ButtonsPanel.setBackground(darkblue);
+
+        // Title panel
         JLabel jl4 = new JLabel();
         ImageIcon imageIcon4 = new javax.swing.ImageIcon(getClass().getResource("assets/img/header-budget.png"));
         Image image4 = imageIcon4.getImage();
@@ -81,21 +87,278 @@ class Project extends JFrame {
         imageIcon4 = new ImageIcon(newimg4);
         jl4.setIcon(imageIcon4);
         P1.add(jl4);
-        jl4.setLocation(50,40);
 
-        // Data that will be displayed in JTable
-        String[][] content = {
-            { "0€", "0€" ,"0€" , "0€"}
-        };
-        // Names of the column
-        String[] header = { "Food", "Housing", "Clothing", "Transport" };
-
-        // JTable initialization
-        jt = new JTable(content, header);
+            String[] header = { "","Food", "Housing", "Clothing", "Transport" };
+            File doc = new File("depenses.txt");
+            if(doc.exists()){
+                try(BufferedReader obj = new BufferedReader(new FileReader(doc))){
+                    String strng;
+                    while((strng=obj.readLine())!=null){
+                        int sauv=0;
+                        int i=0;
+                        if(strng.charAt(i)=='F'){
+                            i++;
+                            while(i<strng.length()){
+                                char myChar = strng.charAt(i);
+                                sauv*=10;
+                                sauv+= Character.getNumericValue(myChar);
+                                i++;
+                            }
+                            foodsauv+=sauv;
+                        }
+                        else if(strng.charAt(i)=='H'){
+                            i++;
+                            while(i<strng.length()){
+                                char myChar = strng.charAt(i);
+                                sauv*=10;
+                                sauv+= Character.getNumericValue(myChar);
+                                i++;
+                            }
+                            houssauv+=sauv;
+                        }
+                        else if(strng.charAt(i)=='C'){
+                            i++;
+                            while(i<strng.length()){
+                                char myChar = strng.charAt(i);
+                                sauv*=10;
+                                sauv+= Character.getNumericValue(myChar);
+                                i++;
+                            }
+                            cloth+=sauv;
+                        }
+                        else if(strng.charAt(i)=='T'){
+                            i++;
+                            while(i<strng.length()){
+                                char myChar = strng.charAt(i);
+                                sauv*=10;
+                                sauv+= Character.getNumericValue(myChar);
+                                i++;
+                            }
+                            tran+=sauv;
+                        }
+                    }
         
-        P1.add(new JScrollPane(jt));
+                }
+            }
+            else{
+                doc.createNewFile();
+            }
+        
+            String[][] content = {
+                {"","Food", "Housing", "Clothing", "Transport"},
+                { "Totals",Integer.toString(foodsauv)+"€", Integer.toString(houssauv)+"€" ,Integer.toString(cloth)+"€" , Integer.toString(tran)+"€"},
+            };
+            Icon icon =new ImageIcon("assets/img/plusicons.png");
+            dessous="Total : "+Integer.toString(foodsauv+houssauv+cloth+tran);
+            // JTable initialization
+            jt = new JTable(content, header);
+            jt.setBounds(30, 40, 200, 300);
+            jt.setSize(20, 20);
+            jt.isCellEditable(1, 1);
+            jt.isCellEditable(1, 2);
+            jt.isCellEditable(1, 3);
+            jt.isCellEditable(1, 4);
+            area = new JTextArea();
+            area.append(dessous);
+        
+        JButton plusfood =new JButton(icon);
+        plusfood.setOpaque(false);
+        plusfood.setContentAreaFilled(false);
+        plusfood.setBorderPainted(false);
+        plusfood.setPreferredSize(new DimensionUIResource(80, 30));
+        plusfood.addActionListener( new ActionListener()
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            // Tu crée un objet fenêtre par exemple: 
+            JDialog f =new JDialog();
+            f.add( new JTextArea("How much did you spend on FOOD?"));
+            f.setLayout(new FlowLayout());
+            JTextField text = new JTextField(20);
+            JButton ok=new JButton("ADD");
+            ok.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+            {
+                String s =text.getText();
+                FileWriter fw;
+                try {
+                    fw = new FileWriter("depenses.txt",true);
+                    foodsauv=houssauv+Integer.parseInt(s);
+                    dessous="Total : "+Integer.toString(foodsauv+houssauv+cloth+tran);
+                    jt.setValueAt(Integer.toString(foodsauv)+"€", 1, 1);
+            jt.setBounds(30, 40, 200, 300);
+            jt.setSize(20, 20);
+            area.setText(dessous);
+                    fw.write("F"+s+'\n');
+                    fw.close();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                f.dispose();
+            }
+            });
+            f.add(text);
+            f.add(ok);
+            f.setSize(350,80);
+            
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        }
+    });
+    JButton plushous =new JButton(icon);
+    plushous.setOpaque(false);
+    plushous.setContentAreaFilled(false);
+    plushous.setBorderPainted(false);
+    plushous.setPreferredSize(new DimensionUIResource(80, 30));
+    plushous.addActionListener( new ActionListener()
+    {
+    public void actionPerformed(ActionEvent e)
+    {
+    // Tu crée un objet fenêtre par exemple: 
+        JDialog f =new JDialog();
+        f.add( new JTextArea("How much did you spend on HOUSING?"));
+        f.setLayout(new FlowLayout());
+        JTextField text = new JTextField(20);
+        JButton ok=new JButton("ADD");
+    ok.addActionListener(new ActionListener()
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+        String s =text.getText();
+        FileWriter fw;
+        try {
+            fw = new FileWriter("depenses.txt",true);
+            houssauv=houssauv+Integer.parseInt(s);    
+            dessous="Total : "+Integer.toString(foodsauv+houssauv+cloth+tran);
+            jt.setValueAt(Integer.toString(houssauv)+"€", 1, 2);
+    jt.setBounds(30, 40, 200, 300);
+    jt.setSize(20, 20);
+    area.setText(dessous);
+            fw.write("H"+s+'\n');
+            fw.close();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        f.dispose();
+        }
+    });
+        f.add(text);
+        f.add(ok);
+        f.setSize(350,80);
+        
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
     }
+    });
+    JButton pluscloth =new JButton(icon);
+    pluscloth.setOpaque(false);
+    pluscloth.setContentAreaFilled(false);
+    pluscloth.setBorderPainted(false);
+    pluscloth.setPreferredSize(new DimensionUIResource(80, 30));
+    pluscloth.addActionListener( new ActionListener()
+    {
+    public void actionPerformed(ActionEvent e)
+    {
+    // Tu crée un objet fenêtre par exemple: 
+        JDialog f =new JDialog();
+        f.add( new JTextArea("How much did you spend on CLOTHING?"));
+        f.setLayout(new FlowLayout());
+        JTextField text = new JTextField(20);
+        JButton ok=new JButton("ADD");
+    ok.addActionListener(new ActionListener()
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+        String s =text.getText();
+        FileWriter fw;
+        try {
+            fw = new FileWriter("depenses.txt",true);
+            cloth=cloth+Integer.parseInt(s);
+            dessous="Total : "+Integer.toString(foodsauv+houssauv+cloth+tran);
+            jt.setValueAt(Integer.toString(cloth)+"€", 1, 3);
+    jt.setBounds(30, 40, 200, 300);
+    jt.setSize(20, 20);
+    area.setText(dessous);
+            fw.write("C"+s+'\n');
+            fw.close();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        f.dispose();
+        }
+    });
+        f.add(text);
+        f.add(ok);
+        f.setSize(350,80);
+        
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+    });
+    JButton plustran =new JButton(icon);
+    plustran.setOpaque(false);
+    plustran.setContentAreaFilled(false);
+    plustran.setBorderPainted(false);
+    plustran.setPreferredSize(new DimensionUIResource(80, 30));
+    plustran.addActionListener( new ActionListener()
+    {
+    public void actionPerformed(ActionEvent e)
+    {
+    // Tu crée un objet fenêtre par exemple: 
+        JDialog f =new JDialog();
+        f.add( new JTextArea("How much did you spend on TRANSPORT?"));
+        f.setLayout(new FlowLayout());
+        JTextField text = new JTextField(20);
+        JButton ok=new JButton("ADD");
+    ok.addActionListener(new ActionListener()
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+        String s =text.getText();
+        FileWriter fw;
+        try {
+            fw = new FileWriter("depenses.txt",true);
+            tran=tran+Integer.parseInt(s);
+            dessous="Total : "+Integer.toString(foodsauv+houssauv+cloth+tran);
+            jt.setValueAt(Integer.toString(tran)+"€", 1, 4);
+    jt.setBounds(30, 40, 200, 300);
+    jt.setSize(20, 20);
+    
 
+    area.setText(dessous);
+            fw.write("T"+s+'\n');
+            fw.close();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        f.dispose();
+        }
+
+    });
+        f.add(text);
+        f.add(ok);
+        f.setSize(350,80);
+        
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+    });
+    setVisible(true);
+        P1.add(jt);
+        P1.add(area);
+        ButtonsPanel.add(plusfood);
+        ButtonsPanel.add(plushous);
+        ButtonsPanel.add(pluscloth);
+        ButtonsPanel.add(plustran);
+        P1.add(ButtonsPanel);
+    }
+    
     public void StudentPanel() {
         P2 = new RoundedPanel();
         P2.setLayout(null);
@@ -183,7 +446,7 @@ class Project extends JFrame {
         imageIcon4 = new ImageIcon(newimg4);
         jl4.setIcon(imageIcon4);
         P3.add(jl4);
-        jl4.setLocation(150,0);
+        jl4.setLocation(120,0);
         jl4.setSize(260,80);
 
         JTextField task;
@@ -287,7 +550,7 @@ class Project extends JFrame {
    }
     } 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         Project splitPane = new Project();
         splitPane.setVisible(true);
     }

@@ -359,7 +359,16 @@ class Project extends JFrame {
         P1.add(ButtonsPanel);
     }
     
-    public void StudentPanel() {
+    String firstname ;
+    String last;
+    String Birth;
+    String Clas;
+    int sexe;
+    ImageIcon imageIcon ; 
+    Image image;
+    Image newimg;
+    JLabel jl;
+    public void StudentPanel() throws FileNotFoundException, IOException {
         P2 = new RoundedPanel();
         P2.setLayout(null);
         //P2.setPreferredSize(new Dimension(900, 190));
@@ -374,39 +383,260 @@ class Project extends JFrame {
         P2.add(jl4);
         jl4.setLocation(350,40);
         jl4.setSize(180,100);
+        File doc = new File("profil.txt");
+        if(doc.exists()){
+            try(BufferedReader obj = new BufferedReader(new FileReader(doc))){
+                String strng;
+                strng=obj.readLine();
+                if(48==strng.charAt(0)){
+                    imageIcon  = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentF.png"));
+                }
+                else{
+                    imageIcon = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentM.png"));
+                }
+                firstname=obj.readLine();
+                last=obj.readLine();
+                Birth=obj.readLine();
+                Clas=obj.readLine();
+                
+            }
+        }
+        else{
+            firstname ="Joël";
+            last="Courtois";
+            Clas="SPE";
+            Birth="01/01";
+            sexe=0;
+            if(sexe==0){
+                imageIcon  = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentF.png"));
+            }
+            else{
+                imageIcon = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentM.png"));
+            }
+            FileWriter fw;
+            try {
+                            
+                fw = new FileWriter("profil.txt",true);
+                System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                fw.close();
+            } catch (IOException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+        }
+        }
+        // Student image
+        jl = new JLabel();
         
-        // Student image 
-        JLabel jl = new JLabel();
-        ImageIcon imageIcon = new javax.swing.ImageIcon(getClass().getResource("assets/img/student.png"));
-        Image image = imageIcon.getImage();
-        Image newimg = image.getScaledInstance(320, 320,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
+        image = imageIcon.getImage();
+        newimg = image.getScaledInstance(320, 320,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imageIcon = new ImageIcon(newimg);
         jl.setIcon(imageIcon);
-        P2.add(jl);
+       
 
         Font font = new Font("Chalkboard SE", Font.PLAIN, 24);
 
-        JLabel firstName = new JLabel("First name: Joel");
+        JLabel firstName = new JLabel("First name: "+firstname);
         firstName.setForeground(darkblue);
         firstName.setFont(font);
-        JLabel lastname = new JLabel("Last name: Courtois");
+        JLabel lastname = new JLabel("Last name: "+last);
         lastname.setForeground(darkblue);
         lastname.setFont(font);
-        JLabel classe = new JLabel("Birthday: 01/01");
+        JLabel classe = new JLabel("Birthday: "+Birth);
         classe.setForeground(darkblue);
         classe.setFont(font);
-        JLabel birthday = new JLabel("Class: SPE");
+        JLabel birthday = new JLabel("Class: "+Clas);
         birthday.setForeground(darkblue);
         birthday.setFont(font);
         JLabel averageGrade = new JLabel("Average Grade: 15.6/20");
         averageGrade.setForeground(darkblue);
         averageGrade.setFont(font);
+        Icon icon =new ImageIcon("assets/img/stylo.png");
 
+        JButton modifie = new JButton(icon);
+        modifie.setOpaque(false);
+        modifie.setContentAreaFilled(false);
+        modifie.setBorderPainted(false);
+        
+        modifie.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                //show jdialog when button is clicked
+                JDialog dialog = new JDialog();
+                dialog.setLayout(new FlowLayout());
+                JLabel Changea= new JLabel("Do you want to change avatar's sexe ?");
+                JButton Ok5=new JButton("YES");
+                Ok5.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                    
+                    if(sexe==0){
+                        sexe=1;
+                        imageIcon  = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentM.png")); 
+                    }
+                    else{
+                        sexe=0;
+                        imageIcon  = new javax.swing.ImageIcon(getClass().getResource("assets/img/studentF.png"));
+                    }
+        
+                    image = imageIcon.getImage();
+                     newimg = image.getScaledInstance(320, 320,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
+                    imageIcon = new ImageIcon(newimg);
+                    jl.setIcon(imageIcon);
+                    if(doc.exists()){
+                        doc.delete();
+                    }
+                    FileWriter fw;
+                try {
+                                
+                    fw = new FileWriter("profil.txt",true);
+                    System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.close();
+                } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+                    }
+                });
+                JLabel Changen= new JLabel("Change your Firstname :");
+                JTextField Fname = new JTextField(10);
+                JButton Ok=new JButton("OK");
+                Ok.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                    String n = Fname.getText();
+                    firstname=n;
+                       firstName.setText("First name: "+firstname);
+                       if(doc.exists()){
+                        doc.delete();
+                    }
+                    FileWriter fw;
+                try {
+                                
+                    fw = new FileWriter("profil.txt",true);
+                    System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.close();
+                } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+                    }
+                });
+                JLabel Changel= new JLabel("Change your Lastname :");
+                JTextField Lname = new JTextField(10);
+                JButton Ok2=new JButton("OK");
+                Ok2.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                    String n = Lname.getText();
+                    last =n;
+                       lastname.setText("Last name: "+last);
+                       if(doc.exists()){
+                        doc.delete();
+                    }
+                    FileWriter fw;
+                try {
+                                
+                    fw = new FileWriter("profil.txt",true);
+                    System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.close();
+                } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+                    }
+                });
+                JLabel Changeb= new JLabel("Change your Birthday exemple : \"31/12/2002\" :");
+                JTextField birth = new JTextField(10);
+                JButton Ok3=new JButton("OK");
+                Ok3.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                    String n = birth.getText();
+                    Birth=n;
+                       classe.setText("Birthday: "+Birth);
+                       if(doc.exists()){
+                        doc.delete();
+                    }
+                    FileWriter fw;
+                try {
+                                
+                    fw = new FileWriter("profil.txt",true);
+                    System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.close();
+                } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+                    }
+                });
+                JLabel Changec= new JLabel("Change your Class level :");
+                JTextField cours = new JTextField(10);
+                JButton Ok4=new JButton("OK");
+                Ok4.addActionListener(new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                    String n = cours.getText();
+                    Clas=n;
+                    birthday.setText("Class: "+Clas);
+                    if(doc.exists()){
+                        doc.delete();
+                    }
+                    FileWriter fw;
+                try {
+                                
+                    fw = new FileWriter("profil.txt",true);
+                    System.out.println(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.write(Integer.toString(sexe)+'\n'+firstname+'\n'+last+'\n'+Birth+'\n'+Clas);
+                    fw.close();
+                } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            }
+                    }
+                });
+                
+       
+
+                dialog.add(Changen);   
+                dialog.add(Fname);   
+                dialog.add(Ok);   
+                dialog.add(Changel);   
+                dialog.add(Lname);   
+                dialog.add(Ok2);
+                dialog.add(Changeb);   
+                dialog.add(birth);   
+                dialog.add(Ok3); 
+                dialog.add(Changec);   
+                dialog.add(cours);   
+                dialog.add(Ok4);   
+                dialog.add(Changea);   
+                dialog.add(Ok5);         
+                dialog.setSize(520,200);
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+                
+            }
+        });
+        
+       
         P2.add(firstName);
         P2.add(lastname);
         P2.add(classe);
         P2.add(birthday);
         P2.add(averageGrade);
+        P2.add(modifie);
+        P2.add(jl);
 
         jl.setLocation(90,180); 
         firstName.setLocation(410,210); 
@@ -414,6 +644,7 @@ class Project extends JFrame {
         classe.setLocation(410,290); 
         birthday.setLocation(410,330); 
         averageGrade.setLocation(410,370); 
+        modifie.setLocation(500,430);
         
         jl.setSize(320,320);
         firstName.setSize(400, 80);
@@ -421,6 +652,7 @@ class Project extends JFrame {
         classe.setSize(400, 80);
         birthday.setSize(400, 80);
         averageGrade.setSize(400, 80);
+        modifie.setSize(50,50);
 
         // Bottom logo
         JLabel jl2 = new JLabel();
@@ -433,7 +665,7 @@ class Project extends JFrame {
         jl2.setLocation(1,400);
         jl2.setSize(850,442);
     }
-
+    
     public void ToDoPanel() {
         P3 = new RoundedPanel();
         P3.setLayout(null);

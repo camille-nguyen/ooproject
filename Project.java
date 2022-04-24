@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 
 
 class Project extends JFrame {
+    Font font = new Font("Chalkboard SE", Font.PLAIN, 24);
+    Font dayFont = new Font("American Typewriter", Font.BOLD, 40);
     // Declare the Panels
     private  RoundedPanel P1;
     private  RoundedPanel P2;
@@ -22,6 +24,9 @@ class Project extends JFrame {
     Color beige = new Color(255,240,217);
     Color darkgreen = new Color(120, 147, 138);
     Color green = new Color(146, 186, 146);
+    Color yellow = new Color(242, 208, 42);
+    Color darkbrown = new Color(152, 124, 74);
+    Color subjectColor = new Color(247,216,186);
 
     // Create main project JFrame with multiple panels inside
     public Project() throws FileNotFoundException, IOException {
@@ -380,9 +385,9 @@ class Project extends JFrame {
         Image newimg4 = image4.getScaledInstance(180,100,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imageIcon4 = new ImageIcon(newimg4);
         jl4.setIcon(imageIcon4);
-        P2.add(jl4);
         jl4.setLocation(350,40);
         jl4.setSize(180,100);
+        P2.add(jl4);
         File doc = new File("profil.txt");
         if(doc.exists()){
             try(BufferedReader obj = new BufferedReader(new FileReader(doc))){
@@ -433,8 +438,6 @@ class Project extends JFrame {
         imageIcon = new ImageIcon(newimg);
         jl.setIcon(imageIcon);
        
-
-        Font font = new Font("Chalkboard SE", Font.PLAIN, 24);
 
         JLabel firstName = new JLabel("First name: "+firstname);
         firstName.setForeground(darkblue);
@@ -666,29 +669,145 @@ class Project extends JFrame {
         jl2.setSize(850,442);
     }
     
+
+    private DefaultListModel todos;
+    private JList list;
     public void ToDoPanel() {
         P3 = new RoundedPanel();
-        P3.setLayout(null);
+
+        CardLayout cardLayout = new CardLayout();
+        JPanel cards = new JPanel(cardLayout);
+        JPanel buttonsPanel = new JPanel();
 
         // Panel title
         JLabel jl4 = new JLabel();
         ImageIcon imageIcon4 = new javax.swing.ImageIcon(getClass().getResource("assets/img/header-todo.png"));
         Image image4 = imageIcon4.getImage();
-        Image newimg4 = image4.getScaledInstance(260,80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
+        Image newimg4 = image4.getScaledInstance(310,100,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imageIcon4 = new ImageIcon(newimg4);
         jl4.setIcon(imageIcon4);
-        P3.add(jl4);
-        jl4.setLocation(120,0);
-        jl4.setSize(260,80);
 
-        JTextField task;
-        task = new JTextField("Enter a new task...");
-        task.setBounds(100,100, 150,30);
-        P3.add(task);
+
+        buttonsPanel.setBackground(darkgreen);
+        todos = new DefaultListModel();
+        // create JButton for adding a task
+        JButton addButton = new JButton( "Add" );
+        addButton.addActionListener(
+            new ActionListener() {
+           
+            public void actionPerformed( ActionEvent event )
+            {
+                String name = JOptionPane.showInputDialog("Enter a new task :3" );
+                todos.addElement(name);
+            }
+        }
+        );
+
+        // create JButton for removing a task
+        JButton removeButton =
+        new JButton( "Remove" );
+       
+        removeButton.addActionListener(
+            new ActionListener() {
+           
+            public void actionPerformed( ActionEvent event )
+            {
+                todos.removeElement(
+                list.getSelectedValue() );
+            }
+        }
+        );
+
+        buttonsPanel.add(addButton);
+        buttonsPanel.add(removeButton);
+
+        list = new JList(todos); 
+        list.setFont(font);
+        list.setForeground(Color.white);
+        list.setPreferredSize(new Dimension(400, 200));
+        list.setBackground(darkgreen);
+
+        cards.add(jl4, BorderLayout.PAGE_START);
+
+        P3.add(cards);
+        P3.add(buttonsPanel);
+        P3.add(list);
     }
 
     public void SchedulePanel() {
         P4 = new RoundedPanel();
+        P4.setLayout(null);
+
+        // Editable textfields
+        JTextField day = new JTextField("Monday");
+        day.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        day.setHorizontalAlignment(JTextField.CENTER);
+        day.setFont(dayFont);
+        day.setForeground(yellow);
+        day.setBackground(green);
+        day.setBounds(5,50, 190,50);
+        P4.add(day);
+
+        // Editable subjects || I tried doing a for loop but it wouldn't show up on the app so yeah here are really badly hard-coded textfields
+        int separator = 0;
+        JTextField subject = new JTextField("Subject");
+        subject.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject.setHorizontalAlignment(JTextField.CENTER);
+        subject.setFont(font);
+        subject.setForeground(darkbrown);
+        subject.setBackground(subjectColor);
+        subject.setBounds(20,130+separator, 155,50);
+        separator += 100;
+        P4.add(subject);
+
+        JTextField subject2 = new JTextField("Subject");
+        subject2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject2.setHorizontalAlignment(JTextField.CENTER);
+        subject2.setFont(font);
+        subject2.setForeground(darkbrown);
+        subject2.setBackground(subjectColor);
+        subject2.setBounds(20,130+separator, 155,50);
+        separator += 105;
+        P4.add(subject2);
+
+        JTextField subject3 = new JTextField("Subject");
+        subject3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject3.setHorizontalAlignment(JTextField.CENTER);
+        subject3.setFont(font);
+        subject3.setForeground(darkbrown);
+        subject3.setBackground(subjectColor);
+        subject3.setBounds(20,130+separator, 155,50);
+        separator += 105;
+        P4.add(subject3);
+
+        JTextField subject4 = new JTextField("Subject");
+        subject4.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject4.setHorizontalAlignment(JTextField.CENTER);
+        subject4.setFont(font);
+        subject4.setForeground(darkbrown);
+        subject4.setBackground(subjectColor);
+        subject4.setBounds(20,130+separator, 155,50);
+        separator += 105;
+        P4.add(subject4);
+
+        JTextField subject5 = new JTextField("Subject");
+        subject5.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject5.setHorizontalAlignment(JTextField.CENTER);
+        subject5.setFont(font);
+        subject5.setForeground(darkbrown);
+        subject5.setBackground(subjectColor);
+        subject5.setBounds(20,130+separator, 155,50);
+        separator += 95;
+        P4.add(subject5);
+
+        JTextField subject6 = new JTextField("Subject");
+        subject6.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        subject6.setHorizontalAlignment(JTextField.CENTER);
+        subject6.setFont(font);
+        subject6.setForeground(darkbrown);
+        subject6.setBackground(subjectColor);
+        subject6.setBounds(20,130+separator, 155,50);
+        P4.add(subject6);
 
         // Timetable image 
         JLabel jl = new JLabel();
@@ -697,6 +816,8 @@ class Project extends JFrame {
         Image newimg = image.getScaledInstance(170, 730,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imageIcon = new ImageIcon(newimg);
         jl.setIcon(imageIcon);
+        jl.setLocation(15,10);
+        jl.setSize(170,730);
         P4.add(jl);
     }
 
